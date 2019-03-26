@@ -6,6 +6,11 @@
 \usepackage[T1,T2A]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[english,russian]{babel}
+\usepackage{geometry}
+\geometry{left=3cm}
+\geometry{right=1.5cm}
+\geometry{top=2cm}
+\geometry{bottom=2cm}
 \begin{document}
 
 \section*{Непрерывные математические модели}
@@ -77,5 +82,17 @@ y_{n+1}(1) = 0,\ y_{n+1}(2) = 0
 \begin{equation}
 y_{n+1}(1) = 0,\ y_{n+1}(2) = 0
 \end{equation}
+
+Первое приближение:
+\begin{equation}
+y_1^N(t) = \sum_{k = 1}^{N}a_ke_k(t)
+\end{equation}
+
+Метод наименьших квадратов:
+\begin{multline}
+\sum_{k = 1}^{N}a_k \int_1^2 [-\ddot{e}_k(t) + 6t^{-10}(y_0(t) + G(t))^2\ e_k(t)]
+[-\ddot{e}_j(t) + 6t^{-10}(y_0(t) + G(t))^2\ e_j(t)]dt = \\
+\int_1^2[6t^{-10}(y_0(t)+G(t))^2\ y_n(t) - 2t^{-10}(y_0(t)+G(t))^3 - 10t^2]\\ [-\ddot{e}_j(t) + 6t^{-10}(y_0(t) + G(t))^2\ e_j(t)]dt
+\end{multline}
 
 \end{document}

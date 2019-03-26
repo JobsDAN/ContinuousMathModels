@@ -1,0 +1,81 @@
+\documentclass[12pt]{article}
+\usepackage{lingmacros}
+\usepackage{tree-dvips}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{mathtext}
+\usepackage[T1,T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\begin{document}
+
+\section*{Непрерывные математические модели}
+
+Модифицированным методом Ньютона-Канторовича найти первые два приближения к решению краевой задачи
+
+\begin{gather}
+	-\ddot{x} + 2t^{-10}*x^3 = -10t^2 \\
+	x(1)=1,\ x(2)=32
+\end{gather}
+
+Точное решение: $x^*(t) = t^5$
+
+\subsection*{Расчетные формулы}
+
+
+
+\begin{gather}
+\ddot{x}(t) + f(t,\ x_0(t),\ \dot{x}_0(t)) = 0
+\end{gather}
+\begin{multline}
+	-\ddot{x}_{n+1}(t) + f'_x(t,\ x_0(t),\ \dot{x_0}(t))\ x_{n+1}(t) +
+	f'_{\dot{x}}(t,\ x_0(t),\ \dot{x}_0(t))\ \dot{x}_{n+1}(t) = \\
+	f'_x(t,\ x_0(t),\ \dot{x_0}(t))\ x_n(t) +
+	f'_{\dot{x}}(t,\ x_0(t),\ \dot{x}_0(t))\ \dot{x}_n(t) -
+	f(t,\ x_n(t),\ \dot{x}_n(t))
+\end{multline}
+\begin{equation}
+	x_{n+1}(a) = \alpha_0,\ x{n+1}(b) = \alpha_1
+\end{equation}
+
+Для задачи (1)-(2) имеем:
+\begin{gather*}
+	f(t,\ x_0(t),\ \dot{x}_0(t)) = 2t^{-10}x^3_0(t) + 10t^2 \\
+	f'_x(t,\ x_0(t),\ \dot{x}_0(t)) = 6t^{-10}x^2_0(t) \\
+	f'_{\dot{x}}(t,\ x_0(t),\ \dot{x}_0(t)) = 0
+\end{gather*}
+
+\begin{multline}
+-\ddot{x}_{n+1}(t) + 6t^{-10}x^2_0(t)x_{n+1}(t) = \\
+ 6t^{-10}x^2_0(t)x_n(t) - 2t^{-10}x^3_0(t) - 10t^2
+\end{multline}
+\begin{equation}
+x_{n+1}(1)=1,\ x_{n+1}(2)=32
+\end{equation}
+Введем замену $x_{n+1}(t) = y_{n+1}(t) + G(t)$, где $G(t)$ имеет вид:
+\begin{equation}
+G(t) = 31t - 30
+\end{equation}
+
+\begin{multline}
+-\ddot{y}_{n+1}(t) + 6t^{-10}(y_0(t) + G(t))^2\ (y_{n+1}(t) + G(t)) = \\
+ 6t^{-10}(y_0(t) + G(t))^2\ (y_n(t) + G(t)) \\- 2t^{-10}(y_0(t) + G(t))^3 - 10t^2
+\end{multline}
+\begin{equation}
+y_{n+1}(1)=0,\ y_{n+1}(2)=0
+\end{equation}
+
+Приведем (9)-(10) к следующему виду:
+\begin{gather}
+p(t)\ddot{y}_{n+1}(t) + q(t)\dot{y}_{n+1}(t) + r(t)y_{n+1}(t) = g_1(t, y_n(t), \dot{y}_n(t)) \\
+y_{n+1}(1) = 0,\ y_{n+1}(2) = 0
+\end{gather}
+
+\begin{multline}
+-\ddot{y}_{n+1}(t) + 6t^{-10}(y_0(t) + G(t))^2\ y_{n+1}(t) = \\
+6t^{-10}(y_0(t) + G(t))^2\ y_n(t) \\- 2t^{-10}(y_0(t) + G(t))^3 - 10t^2
+\end{multline}
+\begin{equation}
+y_{n+1}(1) = 0,\ y_{n+1}(2) = 0
+\end{equation}
+
+\end{document}

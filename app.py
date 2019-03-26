@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.integrate as sp
 import matplotlib.pyplot as plt
+import scipy.optimize as opt
 
 ## Задача здесь уже сформулирована как (4.18)-(4.19), метод наименьших квадратов
 
@@ -13,17 +14,11 @@ def exect(t):
 def e(k, t):
 	return np.sin(np.pi * k * (t - 1))
 
+def e1(k, t):
+	return np.pi * k * np.cos(np.pi * k * (t - 1))
 # вторая производная
 def e2(k, t):
 	return -(np.pi**2 * k**2 * np.sin(np.pi * k * (t - 1)))
-
-### алгебраические полиномы (не Лежандра)
-#def e(k, t):
-#	return (t - 1) * (2 - t) * t**(k - 1)
-
-## вторая производная
-#def e2(k, t):
-#	return t**(k - 3) * (k**2 * (-(t**2 - 3 * t + 2)) - k * (t**2 + 3 * t - 6) - 4)
 
 ## функция замены
 def G(t):
@@ -32,28 +27,20 @@ def G(t):
 ## начальное приближение
 def getY0(t):
 	return 0.0
+def getY0Diff1(t):
+	return 0.0
+def getY0Diff2(t):
+	return 0.0
 
 ## значение функции на прошлой итерации
 def getYn(t, coefs):
-	if iterInd == 0:
+	if len(coefs) == 0:
 		return getY0(t)
 	
 	accum = 0.0
 	for k in range(len(coefs)):
 		accum += coefs[k] * e(k + 1, t)
 	return accum
-
-## уравнение при Y0 = 0
-#def operator(k, t):
-#	return -e2(k, t) + 6 * t**(-10) * G(t)**2 * e(k, t)
-
-#def integrate_left(k, j, A, B):
-#	return sp.quad(lambda t: operator(k, t) * operator(j, t), A, B)[0]
-
-#def integrate_right(j, prevCoefsAk, A, B):
-#	return sp.quad(lambda t: (6 * t**(-10) * G(t)**2 * getYn(t, prevCoefsAk) - 2 * t**(-10) * (getYn(t, prevCoefsAk) + G(t))**3 - 10 * t**2) *
-#						     operator(j, t),
-#							 A, B)[0]
 
 ## оператор А
 def operator(k, t):
@@ -86,10 +73,67 @@ def plotGraph(A, B, stepSize, coefsAk):
 	plt.plot(x_points, exectX, 'b', x_points, approximateX, 'r')
 	plt.show()
 	
+def solveLSM(prevCoefs, iterCount, A, B):
+	# матрица коэфициентов
+	coefs = []
+	# вектор правой части СЛАУ
+	f = []
 
-#	максимальный номер коэфициента, должен вычисляться как указано в п. 7
-N = 5
-Eps = 0.001
+	# пишу на питоне, а получается С#
+	for j in range(1, iterCount + 1):
+		equation = []
+		# коэффициенты для каждого уравнения
+		for k in range(1, iterCount + 1):
+			equation.append(integrate_left(k, j, A, B))
+
+		
+		coefs.append(equation)
+		f.append(integrate_right(j, prevCoefs, A, B))
+	
+	return np.linalg.solve(coefs, f)
+
+def getMaxYn(t, coefs):
+	accum = 0.0
+	for k in range(len(coefs)):
+		accum += coefs[k] * e(k + 1, t)
+	return accum
+
+
+def getMaxYnDiff1(t, coefs):
+	accum = 0.0
+	for k in range(len(coefs)):
+		accum += coefs[k] * e1(k + 1, t)
+	return accum
+
+def getMaxYnDiff2(t, coefs):
+	accum = 0.0
+	for k in range(len(coefs)):
+		accum += coefs[k] * e2(k + 1, t)
+	return accum
+
+
+def norm(coefs):
+	diff0 = opt.fminbound(lambda x, coefs: -getMaxYn(x, coefs), 1, 2, args=(coefs, ))
+	diff1 = opt.fminbound(lambda x, coefs: -getMaxYnDiff1(x, coefs), 1, 2, args=(coefs, ))
+	diff2 = opt.fminbound(lambda x, coefs: -getMaxYnDiff2(x, coefs), 1, 2, args=(coefs, ))
+	return abs(diff0) + abs(diff1) + abs(diff2)
+
+def getOptimalN(eps):
+	return 24
+	#не работает
+	N = 1
+	while True:
+		coefs_l = solveLSM([], N, A, B)
+		normN = norm(coefs_l)
+		coefs_l = solveLSM([], N + 1, A, B)
+		normNPlusOne = norm(coefs_l)
+	
+		print(abs(normN - normNPlusOne))
+		if abs(normN - normNPlusOne) < eps:
+			return N
+		N += 1
+
+eps = 0.001
 MAX_ITERATION_COUNT = 50
 stepSize = 0.005
 #	нижняя граница
@@ -99,25 +143,11 @@ B = 2.0
 
 iterInd = 0
 shouldContinue = True
-prevCoefsAk = []
+N = getOptimalN(eps)
+
+coefs = []
 while iterInd < MAX_ITERATION_COUNT and shouldContinue:
-	# матрица коэфициентов
-	coefs = []
-	# вектор правой части СЛАУ
-	f = []
-
-	# пишу на питоне, а получается С#
-	for j in range(1, N + 1):
-		equation = []
-		# коэффициенты для каждого уравнения
-		for k in range(1, N + 1):
-			equation.append(integrate_left(k, j, A, B))
-
-		
-		coefs.append(equation)
-		f.append(integrate_right(j, prevCoefsAk, A, B))
-	
-	prevCoefsAk = np.linalg.solve(coefs, f)
+	coefs = solveLSM(coefs, N, A, B)
 
 	# ниже должна быть логика, которая отвечает за прекращение работы алгоритма, 
 	# в случае, если найдено решение, удовлетворяющее заданному Eps
@@ -134,4 +164,4 @@ while iterInd < MAX_ITERATION_COUNT and shouldContinue:
 
 	iterInd += 1
 	print(iterInd)
-	plotGraph(A, B, stepSize, prevCoefsAk)
+	plotGraph(A, B, stepSize, coefs)

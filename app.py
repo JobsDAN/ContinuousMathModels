@@ -119,7 +119,7 @@ def norm(coefs):
 	return abs(diff0) + abs(diff1) + abs(diff2)
 
 def getOptimalN(eps):
-	return 24
+	return 5
 	#не работает
 	N = 1
 	while True:

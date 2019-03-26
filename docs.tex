@@ -39,7 +39,7 @@
 	f(t,\ x_n(t),\ \dot{x}_n(t))
 \end{multline}
 \begin{equation}
-	x_{n+1}(a) = \alpha_0,\ x{n+1}(b) = \alpha_1
+	x_{n+1}(a) = \alpha_0,\ x_{n+1}(b) = \alpha_1
 \end{equation}
 
 Для задачи (1)-(2) имеем:
@@ -63,7 +63,7 @@ G(t) = 31t - 30
 \end{equation}
 
 \begin{multline}
--\ddot{y}_{n+1}(t) + 6t^{-10}(y_0(t) + G(t))^2\ (y_{n+1}(t) + G(t)) = 
+-\ddot{y}_{n+1}(t) + 6t^{-10}(y_0(t) + G(t))^2\ (y_{n+1}(t) + G(t)) =
  6t^{-10}(y_0(t) + G(t))^2\ (y_n(t) + G(t)) \\- 2t^{-10}(y_0(t) + G(t))^3 - 10t^2
 \end{multline}
 \begin{equation}
@@ -77,7 +77,7 @@ y_{n+1}(1) = 0,\ y_{n+1}(2) = 0
 \end{gather}
 
 \begin{multline}
--\ddot{y}_{n+1}(t) + 6t^{-10}(y_0(t) + G(t))^2\ y_{n+1}(t) = 
+-\ddot{y}_{n+1}(t) + 6t^{-10}(y_0(t) + G(t))^2\ y_{n+1}(t) =
 6t^{-10}(y_0(t) + G(t))^2\ y_n(t) \\- 2t^{-10}(y_0(t) + G(t))^3 - 10t^2
 \end{multline}
 \begin{equation}
@@ -93,8 +93,8 @@ y_1^N(t) = \sum_{k = 1}^{N}a_ke_k(t)
 \begin{multline}
 \sum_{k = 1}^{N}a_k \int_1^2 [-\ddot{e}_k(t) + 6t^{-10}(y_0(t) + G(t))^2\ e_k(t)]
 [-\ddot{e}_j(t) + 6t^{-10}(y_0(t) + G(t))^2\ e_j(t)]dt = \\
-\int_1^2[6t^{-10}(y_0(t)+G(t))^2\ y_n(t) - 2t^{-10}(y_0(t)+G(t))^3 - 10t^2]\\ [-\ddot{e}_j(t) + 6t^{-10}(y_0(t) + G(t))^2\ e_j(t)]dt,\ \ \ 
-j = \overline{1,n} 
+\int_1^2[6t^{-10}(y_0(t)+G(t))^2\ y_n(t) - 2t^{-10}(y_0(t)+G(t))^3 - 10t^2]\\ [-\ddot{e}_j(t) + 6t^{-10}(y_0(t) + G(t))^2\ e_j(t)]dt,\ \ \
+j = \overline{1,n}
 \end{multline}
 
 В качестве координатной системы используются тригонометрические многочлены:

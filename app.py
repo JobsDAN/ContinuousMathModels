@@ -36,7 +36,7 @@ def getY0Diff2(t):
 def getYn(t, coefs):
 	if len(coefs) == 0:
 		return getY0(t)
-	
+
 	accum = 0.0
 	for k in range(len(coefs)):
 		accum += coefs[k] * e(k + 1, t)
@@ -72,7 +72,7 @@ def plotGraph(A, B, stepSize, coefsAk):
 
 	plt.plot(x_points, exectX, 'b', x_points, approximateX, 'r')
 	plt.show()
-	
+
 def solveLSM(prevCoefs, iterCount, A, B):
 	# матрица коэфициентов
 	coefs = []
@@ -86,10 +86,10 @@ def solveLSM(prevCoefs, iterCount, A, B):
 		for k in range(1, iterCount + 1):
 			equation.append(integrate_left(k, j, A, B))
 
-		
+
 		coefs.append(equation)
 		f.append(integrate_right(j, prevCoefs, A, B))
-	
+
 	return np.linalg.solve(coefs, f)
 
 def getMaxYn(t, coefs):
@@ -127,7 +127,7 @@ def getOptimalN(eps):
 		normN = norm(coefs_l)
 		coefs_l = solveLSM([], N + 1, A, B)
 		normNPlusOne = norm(coefs_l)
-	
+
 		print(abs(normN - normNPlusOne))
 		if abs(normN - normNPlusOne) < eps:
 			return N
@@ -149,10 +149,10 @@ coefs = []
 while shouldContinue and iterInd < MAX_ITERATION_COUNT:
 	coefs = solveLSM(coefs, N, A, B)
 
-	# ниже должна быть логика, которая отвечает за прекращение работы алгоритма, 
+	# ниже должна быть логика, которая отвечает за прекращение работы алгоритма,
 	# в случае, если найдено решение, удовлетворяющее заданному Eps
 	# ???. мера пространства С^2 = max(|xn - ex|) + max(|(xn - ex)'|) + max(|(xn - ex)''|)
-	# 
+	#
 	# на данный момент, это полная хуита(инфа 47%)
 	#shouldContinue = False
 	#for i in range(STEP_COUNT):

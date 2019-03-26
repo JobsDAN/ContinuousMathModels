@@ -146,7 +146,7 @@ shouldContinue = True
 N = getOptimalN(eps)
 
 coefs = []
-while iterInd < MAX_ITERATION_COUNT and shouldContinue:
+while shouldContinue and iterInd < MAX_ITERATION_COUNT:
 	coefs = solveLSM(coefs, N, A, B)
 
 	# ниже должна быть логика, которая отвечает за прекращение работы алгоритма, 

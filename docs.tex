@@ -44,6 +44,8 @@
 
 Для задачи (1)-(2) имеем:
 \begin{gather*}
+	-\ddot{x} + 2t^{-10}x^3 + 10t^2 = 0 \\
+	f(t,\ x(t),\ \dot{x}(t)) = 2t^{-10}x^3(t) + 10t^2 \\
 	f(t,\ x_0(t),\ \dot{x}_0(t)) = 2t^{-10}x^3_0(t) + 10t^2 \\
 	f'_x(t,\ x_0(t),\ \dot{x}_0(t)) = 6t^{-10}x^2_0(t) \\
 	f'_{\dot{x}}(t,\ x_0(t),\ \dot{x}_0(t)) = 0
@@ -58,8 +60,12 @@ x_{n+1}(1)=1,\ x_{n+1}(2)=32
 \end{equation}
 
 Введем замену $x_{n+1}(t) = y_{n+1}(t) + G(t)$, где $G(t)$ имеет вид:
+\begin{gather*}
+	G(t) = \alpha \frac{b-t}{b-a} + \beta \frac{t-a}{b-a} \\
+	G(t) = 1 (2-t) + 32 (t-1) \\
+\end{gather*}
 \begin{equation}
-G(t) = 31t - 30
+	G(t) = 31t - 30
 \end{equation}
 
 \begin{multline}

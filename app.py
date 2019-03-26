@@ -74,48 +74,45 @@ def plotGraph(A, B, stepSize, coefsAk):
 	plt.show()
 
 def solveLSM(prevCoefs, iterCount, A, B):
-	# матрица коэфициентов
-	coefs = []
+	iters = range(1, iterCount + 1)
+
 	# вектор правой части СЛАУ
-	f = []
+	f = [ integrate_right(j, prevCoefs, A, B) for j in iters ]
 
-	# пишу на питоне, а получается С#
-	for j in range(1, iterCount + 1):
-		equation = []
-		# коэффициенты для каждого уравнения
-		for k in range(1, iterCount + 1):
-			equation.append(integrate_left(k, j, A, B))
-
-
-		coefs.append(equation)
-		f.append(integrate_right(j, prevCoefs, A, B))
+	# матрица коэфициентов
+	# коэффициенты для каждого уравнения
+	coefs = [
+	    [ integrate_left(k, j, A, B) for k in iters ]
+	    for j in iters
+	]
 
 	return np.linalg.solve(coefs, f)
 
-def getMaxYn(t, coefs):
-	accum = 0.0
-	for k in range(len(coefs)):
-		accum += coefs[k] * e(k + 1, t)
+def getMax(f):
+	def f(t, coef):
+		accum = 0.0
+		for k in range(len(coefs)):
+		    accum += coefs[k] * f(k + 1, t)
 	return accum
 
+def getMaxYn(t, coefs):
+	return getMax(e)
 
 def getMaxYnDiff1(t, coefs):
-	accum = 0.0
-	for k in range(len(coefs)):
-		accum += coefs[k] * e1(k + 1, t)
-	return accum
+	return getMax(e1)
 
 def getMaxYnDiff2(t, coefs):
-	accum = 0.0
-	for k in range(len(coefs)):
-		accum += coefs[k] * e2(k + 1, t)
-	return accum
+	return getMax(e2)
 
+def negative(f):
+	def helper(*args):
+	    return -f(*args)
+	return helper
 
 def norm(coefs):
-	diff0 = opt.fminbound(lambda x, coefs: -getMaxYn(x, coefs), 1, 2, args=(coefs, ))
-	diff1 = opt.fminbound(lambda x, coefs: -getMaxYnDiff1(x, coefs), 1, 2, args=(coefs, ))
-	diff2 = opt.fminbound(lambda x, coefs: -getMaxYnDiff2(x, coefs), 1, 2, args=(coefs, ))
+	diff0 = opt.fminbound(negative(getMaxYn),      1, 2, args=(coefs, ))
+	diff1 = opt.fminbound(negative(getMaxYnDiff1), 1, 2, args=(coefs, ))
+	diff2 = opt.fminbound(negative(getMaxYnDiff2), 1, 2, args=(coefs, ))
 	return abs(diff0) + abs(diff1) + abs(diff2)
 
 def getOptimalN(eps):

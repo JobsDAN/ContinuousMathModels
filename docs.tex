@@ -52,11 +52,11 @@
 \end{gather*}
 
 \begin{equation}
--\ddot{x}_{n+1}(t) + 6t^{-10}x^2_0(t)x_{n+1}(t) =
- 6t^{-10}x^2_0(t)x_n(t) - 2t^{-10}x^3_0(t) - 10t^2
+    -\ddot{x}_{n+1}(t) + 6t^{-10}x^2_0(t)x_{n+1}(t) =
+     6t^{-10}x^2_0(t)x_n(t) - 2t^{-10}x^3_0(t) - 10t^2
 \end{equation}
 \begin{equation}
-x_{n+1}(1)=1,\ x_{n+1}(2)=32
+    x_{n+1}(1)=1,\ x_{n+1}(2)=32
 \end{equation}
 
 Введем замену $x_{n+1}(t) = y_{n+1}(t) + G(t)$, где $G(t)$ имеет вид:
@@ -70,45 +70,48 @@ x_{n+1}(1)=1,\ x_{n+1}(2)=32
 \end{equation}
 
 \begin{multline}
--\ddot{y}_{n+1}(t) + 6t^{-10}(y_0(t) + G(t))^2\ (y_{n+1}(t) + G(t)) =
- 6t^{-10}(y_0(t) + G(t))^2\ (y_n(t) + G(t)) \\- 2t^{-10}(y_0(t) + G(t))^3 - 10t^2
+    -\ddot{y}_{n+1}(t) + 6t^{-10}(y_0(t) + G(t))^2\ (y_{n+1}(t) + G(t)) =
+     6t^{-10}(y_0(t) + G(t))^2\ (y_n(t) + G(t)) \\
+     - 2t^{-10}(y_0(t) + G(t))^3 - 10t^2
 \end{multline}
 \begin{equation}
-y_{n+1}(1)=0,\ y_{n+1}(2)=0
+    y_{n+1}(1)=0,\ y_{n+1}(2)=0
 \end{equation}
 
 Приведем (9)-(10) к следующему виду:
 \begin{gather}
-p(t)\ddot{y}_{n+1}(t) + q(t)\dot{y}_{n+1}(t) + r(t)y_{n+1}(t) = g_1(t, y_n(t), \dot{y}_n(t)) \\
-y_{n+1}(1) = 0,\ y_{n+1}(2) = 0
+    p(t)\ddot{y}_{n+1}(t) + q(t)\dot{y}_{n+1}(t) + r(t)y_{n+1}(t) = g_1(t, y_n(t), \dot{y}_n(t)) \\
+    y_{n+1}(1) = 0,\ y_{n+1}(2) = 0
 \end{gather}
 
 \begin{multline}
--\ddot{y}_{n+1}(t) + 6t^{-10}(y_0(t) + G(t))^2\ y_{n+1}(t) =
-6t^{-10}(y_0(t) + G(t))^2\ y_n(t) \\- 2t^{-10}(y_0(t) + G(t))^3 - 10t^2
+    -\ddot{y}_{n+1}(t) + 6t^{-10}(y_0(t) + G(t))^2\ y_{n+1}(t) =
+    6t^{-10}(y_0(t) + G(t))^2\ y_n(t) \\
+    - 2t^{-10}(y_0(t) + G(t))^3 - 10t^2
 \end{multline}
 \begin{equation}
-y_{n+1}(1) = 0,\ y_{n+1}(2) = 0
+    y_{n+1}(1) = 0,\ y_{n+1}(2) = 0
 \end{equation}
 
 Первое приближение:
 \begin{equation}
-y_1^N(t) = \sum_{k = 1}^{N}a_ke_k(t)
+    y_1^N(t) = \sum_{k = 1}^{N}a_ke_k(t)
 \end{equation}
 
 Метод наименьших квадратов:
 \begin{multline}
-\sum_{k = 1}^{N}a_k \int_1^2 [-\ddot{e}_k(t) + 6t^{-10}(y_0(t) + G(t))^2\ e_k(t)]
-[-\ddot{e}_j(t) + 6t^{-10}(y_0(t) + G(t))^2\ e_j(t)]dt = \\
-\int_1^2[6t^{-10}(y_0(t)+G(t))^2\ y_n(t) - 2t^{-10}(y_0(t)+G(t))^3 - 10t^2]\\ [-\ddot{e}_j(t) + 6t^{-10}(y_0(t) + G(t))^2\ e_j(t)]dt,\ \ \
-j = \overline{1,N}
+    \sum_{k = 1}^{N}a_k \int_1^2 [-\ddot{e}_k(t) + 6t^{-10}(y_0(t) + G(t))^2\ e_k(t)]
+    [-\ddot{e}_j(t) + 6t^{-10}(y_0(t) + G(t))^2\ e_j(t)]dt = \\
+    \int_1^2[6t^{-10}(y_0(t)+G(t))^2\ y_n(t) - 2t^{-10}(y_0(t)+G(t))^3 - 10t^2]\\
+    [-\ddot{e}_j(t) + 6t^{-10}(y_0(t) + G(t))^2\ e_j(t)]dt,\ \ \
+    j = \overline{1,N}
 \end{multline}
 
 В качестве координатной системы используются тригонометрические многочлены:
 \begin{equation}
-\begin{split}
-e_k(t) &= \sin{\pi k (t - 1)} \\
-\ddot{e}_k(t)&= -\pi^2 k^2\sin{\pi k(t-1)}
-\end{split}
+    \begin{split}
+        e_k(t) &= \sin{\pi k (t - 1)} \\
+        \ddot{e}_k(t)&= -\pi^2 k^2\sin{\pi k(t-1)}
+    \end{split}
 \end{equation}
 \end{document}

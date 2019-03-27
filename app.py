@@ -3,12 +3,12 @@ import scipy.integrate as sp
 import matplotlib.pyplot as plt
 import scipy.optimize as opt
 
+# TODO: Погрешность
 ## Задача здесь уже сформулирована как (4.18)-(4.19), метод наименьших квадратов
-
 
 #точное значение функции в t
 def exect(t):
-	return t**5
+	return t**4
 
 ### тригонометрические полиномы
 def e(k, t):
@@ -16,13 +16,14 @@ def e(k, t):
 
 def e1(k, t):
 	return np.pi * k * np.cos(np.pi * k * (t - 1))
+
 # вторая производная
 def e2(k, t):
 	return -(np.pi**2 * k**2 * np.sin(np.pi * k * (t - 1)))
 
 ## функция замены
 def G(t):
-	return 31 * t - 30
+	return 15 * t - 14
 
 ## начальное приближение
 def getY0(t):
@@ -52,9 +53,10 @@ def integrate_left(k, j, A, B):
 
 ## интеграл, стоящий справа от знака равенства
 def integrate_right(j, prevCoefsAk, A, B):
-	return sp.quad(lambda t: (6 * t**(-10) * (getY0(t) + G(t))**2 * getYn(t, prevCoefsAk) - 2 * t**(-10) * (getY0(t) + G(t))**3 - 10 * t**2) *
-						     operator(j, t),
-							 A, B)[0]
+	return sp.quad(lambda t: (
+		6 * t**(-10) * (getY0(t) + G(t))**2 * getYn(t, prevCoefsAk) - 
+		2 * t**(-10) * (getY0(t) + G(t))**3 - 10 * t**2) *
+			operator(j, t), A, B)[0]
 
 def plotGraph(A, B, stepSize, coefsAk):
 	stepCount = int((B - A) / stepSize + 1)

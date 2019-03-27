@@ -19,10 +19,10 @@
 
 \begin{gather}
 	-\ddot{x} + 2t^{-10}x^3 = -10t^2 \\
-	x(1)=1,\ x(2)=32
+	x(1)=1,\ x(2)=16
 \end{gather}
 
-Точное решение: $x^*(t) = t^5$
+Точное решение: $x^*(t) = t^4$
 
 \subsection*{Расчетные формулы}
 
@@ -62,10 +62,11 @@ x_{n+1}(1)=1,\ x_{n+1}(2)=32
 Введем замену $x_{n+1}(t) = y_{n+1}(t) + G(t)$, где $G(t)$ имеет вид:
 \begin{gather*}
 	G(t) = \alpha \frac{b-t}{b-a} + \beta \frac{t-a}{b-a} \\
-	G(t) = 1 (2-t) + 32 (t-1) \\
+	G(t) = 1 (2-t) + 16 (t-1) \\
+	G(t) = 2-t + 16t-16 \\
 \end{gather*}
 \begin{equation}
-	G(t) = 31t - 30
+	G(t) = 15t - 14
 \end{equation}
 
 \begin{multline}
@@ -100,7 +101,7 @@ y_1^N(t) = \sum_{k = 1}^{N}a_ke_k(t)
 \sum_{k = 1}^{N}a_k \int_1^2 [-\ddot{e}_k(t) + 6t^{-10}(y_0(t) + G(t))^2\ e_k(t)]
 [-\ddot{e}_j(t) + 6t^{-10}(y_0(t) + G(t))^2\ e_j(t)]dt = \\
 \int_1^2[6t^{-10}(y_0(t)+G(t))^2\ y_n(t) - 2t^{-10}(y_0(t)+G(t))^3 - 10t^2]\\ [-\ddot{e}_j(t) + 6t^{-10}(y_0(t) + G(t))^2\ e_j(t)]dt,\ \ \
-j = \overline{1,n}
+j = \overline{1,N}
 \end{multline}
 
 В качестве координатной системы используются тригонометрические многочлены:

@@ -103,8 +103,12 @@
 
 Метод наименьших квадратов:
 
-\newcommand{\gone}{\ensuremath{6t^{-10}(y_0(t)+G(t))^2\ y_n(t) - 2t^{-10}(y_0(t)+G(t))^3 - 10t^2}}
-\newcommand{\operator}[1]{\ensuremath{-\ddot{e}_#1(t) + 6t^{-10}(y_0(t) + G(t))^2\ e_#1(t)}}
+\newcommand{\gone}{\ensuremath{
+    6t^{-10}(y_0(t)+G(t))^2\ y_n(t) - 2t^{-10}(y_0(t)+G(t))^3 - 10t^2
+}}
+\newcommand{\operator}[1]{\ensuremath{
+    -\ddot{e}_#1(t) + 6t^{-10}(y_0(t) + G(t))^2\ e_#1(t)
+}}
 
 \begin{multline} \label{lsm}
     \sum_{k = 1}^{N}a_k

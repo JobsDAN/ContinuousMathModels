@@ -15,9 +15,6 @@ def exect(t):
 def e(k, t):
 	return np.sin(np.pi * k * (t - 1))
 
-def e1(k, t):
-	return np.pi * k * np.cos(np.pi * k * (t - 1))
-
 # вторая производная
 def e2(k, t):
 	return -(np.pi**2 * k**2 * np.sin(np.pi * k * (t - 1)))
@@ -27,22 +24,25 @@ def G(t):
 	return 15 * t - 14
 
 ## начальное приближение
-def getY0(t):
+def y_0(t):
 	return 0.0
 
 ## значение функции на прошлой итерации
-def getYn(t, coefs):
+def getYn(coefs):
 	if len(coefs) == 0:
-		return getY0(t)
+		return y_0
 
-	accum = 0.0
-	for k in range(len(coefs)):
-		accum += coefs[k] * e(k + 1, t)
-	return accum
+	def yn(t):
+		accum = 0.0
+		for k in range(len(coefs)):
+			accum += coefs[k] * e(k + 1, t)
+		return accum
+
+	return yn
 
 ## оператор А
 def operator(k, t):
-	return -e2(k, t) + 6 * t**(-10) * (getY0(t) + G(t))**2 * e(k, t)
+	return -e2(k, t) + 6 * t**(-10) * (y_0(t) + G(t))**2 * e(k, t)
 
 ## интеграл, стоящий слева от знака равенства
 def integrate_left(k, j, A, B):
@@ -50,9 +50,10 @@ def integrate_left(k, j, A, B):
 
 ## интеграл, стоящий справа от знака равенства
 def integrate_right(j, prevCoefsAk, A, B):
+	y_n = getYn(prevCoefsAk)
 	return sp.quad(lambda t: (
-		6 * t**(-10) * (getY0(t)              + G(t))**2 * getYn(t, prevCoefsAk) - 
-		2 * t**(-10) * (getYn(t, prevCoefsAk) + G(t))**3 - 10 * t**2) *
+		6 * t**(-10) * (y_0(t) + G(t))**2 * y_n(t) - 
+		2 * t**(-10) * (y_n(t) + G(t))**3 - 10 * t**2) *
 			operator(j, t), A, B)[0]
 
 def plotGraph(A, B, stepSize, coefsAk):
@@ -65,9 +66,9 @@ def plotGraph(A, B, stepSize, coefsAk):
 		t = A + i * stepSize
 		exectX.append(exect(t))
 
-		#Xn(t) = Yn(t) + G(t)
-		xn = getYn(t, coefsAk) + G(t)
-		approximateX.append(xn)
+		y_n = getYn(coefsAk)
+		x_n = y_n(t) + G(t)
+		approximateX.append(x_n)
 
 	plt.plot(x_points, exectX, 'b', x_points, approximateX, 'r')
 	plt.show()
@@ -98,44 +99,45 @@ def diff(a, b):
 
 def getXn(coefs):
 	def xn(t):
-		return getYn(t, coefs) + G(t)
+		return getYn(coefs)(t) + G(t)
 	return xn
 
 def getOptimalN(eps):
-	return 5
-	#не работает
 	N = 1
 	while True:
-		coefs_l = solveLSM([], N, A, B)
-		normN = norm(coefs_l)
-		coefs_l = solveLSM([], N + 1, A, B)
-		normNPlusOne = norm(coefs_l)
+		yn0 = getYn(solveLSM([], N + 0, A, B))
+		yn1 = getYn(solveLSM([], N + 1, A, B))
 
-		print(abs(normN - normNPlusOne))
-		if abs(normN - normNPlusOne) < eps:
+		norm = norm_L2(diff(yn0, yn1), A, B)
+		if norm < eps:
 			return N
 		N += 1
 
-eps = 1e-5
-MAX_ITERATION_COUNT = 50
-stepSize = 0.005
-#	нижняя граница
-A = 1.0
-#	верхняя граница
-B = 2.0
+if __name__ == "__main__":
+	eps = 1e-5
+	MAX_ITERATION_COUNT = 50
+	stepSize = 0.005
+	#	нижняя граница
+	A = 1.0
+	#	верхняя граница
+	B = 2.0
 
-iterInd = 0
-N = getOptimalN(eps)
+	iterInd = 0
+	N = getOptimalN(eps)
+	print("N:", N)
 
-coefs = []
-while iterInd < MAX_ITERATION_COUNT:
-	coefs = solveLSM(coefs, N, A, B)
+	coefs = []
+	while iterInd < MAX_ITERATION_COUNT:
+		coefs = solveLSM(coefs, N, A, B)
 
-	xn = getXn(coefs)
-	norm = norm_L2(diff(xn, exect), A, B)
-	if norm < eps:
-		break
+		xn = getXn(coefs)
+		norm = norm_L2(diff(xn, exect), A, B)
+		if norm < eps:
+			break
 
-	iterInd += 1
-	print(iterInd)
-	plotGraph(A, B, stepSize, coefs)
+		iterInd += 1
+		plotGraph(A, B, stepSize, coefs)
+
+	print("Iter count:", iterInd)
+	delta = norm_L2(diff(xn, exect), A, B)
+	print("Delta:", delta)

@@ -54,8 +54,8 @@ def integrate_left(k, j, A, B):
 ## интеграл, стоящий справа от знака равенства
 def integrate_right(j, prevCoefsAk, A, B):
 	return sp.quad(lambda t: (
-		6 * t**(-10) * (getY0(t) + G(t))**2 * getYn(t, prevCoefsAk) - 
-		2 * t**(-10) * (getYn(t) + G(t))**3 - 10 * t**2) *
+		6 * t**(-10) * (getY0(t)              + G(t))**2 * getYn(t, prevCoefsAk) - 
+		2 * t**(-10) * (getYn(t, prevCoefsAk) + G(t))**3 - 10 * t**2) *
 			operator(j, t), A, B)[0]
 
 def plotGraph(A, B, stepSize, coefsAk):

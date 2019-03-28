@@ -28,10 +28,6 @@ def G(t):
 ## начальное приближение
 def getY0(t):
 	return 0.0
-def getY0Diff1(t):
-	return 0.0
-def getY0Diff2(t):
-	return 0.0
 
 ## значение функции на прошлой итерации
 def getYn(t, coefs):

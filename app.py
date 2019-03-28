@@ -1,5 +1,6 @@
 import numpy as np
 import scipy.integrate as sp
+import scipy.misc as ms
 import matplotlib.pyplot as plt
 import scipy.optimize as opt
 
@@ -86,32 +87,19 @@ def solveLSM(prevCoefs, iterCount, A, B):
 
 	return np.linalg.solve(coefs, f)
 
-def getMax(f):
-	def f(t, coef):
-		accum = 0.0
-		for k in range(len(coefs)):
-		    accum += coefs[k] * f(k + 1, t)
-	return accum
+def norm_L2(f, a, b):
+	I = sp.quad(lambda t: abs(f(t))**2, a, b)[0]
+	return np.square(I)
 
-def getMaxYn(t, coefs):
-	return getMax(e)
+def diff(a, b):
+	def f(t):
+		return a(t) - b(t)
+	return f
 
-def getMaxYnDiff1(t, coefs):
-	return getMax(e1)
-
-def getMaxYnDiff2(t, coefs):
-	return getMax(e2)
-
-def negative(f):
-	def helper(*args):
-	    return -f(*args)
-	return helper
-
-def norm(coefs):
-	diff0 = opt.fminbound(negative(getMaxYn),      1, 2, args=(coefs, ))
-	diff1 = opt.fminbound(negative(getMaxYnDiff1), 1, 2, args=(coefs, ))
-	diff2 = opt.fminbound(negative(getMaxYnDiff2), 1, 2, args=(coefs, ))
-	return abs(diff0) + abs(diff1) + abs(diff2)
+def getXn(coefs):
+	def xn(t):
+		return getYn(t, coefs) + G(t)
+	return xn
 
 def getOptimalN(eps):
 	return 5
@@ -128,7 +116,7 @@ def getOptimalN(eps):
 			return N
 		N += 1
 
-eps = 0.001
+eps = 1e-5
 MAX_ITERATION_COUNT = 50
 stepSize = 0.005
 #	нижняя граница
@@ -137,25 +125,16 @@ A = 1.0
 B = 2.0
 
 iterInd = 0
-shouldContinue = True
 N = getOptimalN(eps)
 
 coefs = []
-while shouldContinue and iterInd < MAX_ITERATION_COUNT:
+while iterInd < MAX_ITERATION_COUNT:
 	coefs = solveLSM(coefs, N, A, B)
 
-	# ниже должна быть логика, которая отвечает за прекращение работы алгоритма,
-	# в случае, если найдено решение, удовлетворяющее заданному Eps
-	# ???. мера пространства С^2 = max(|xn - ex|) + max(|(xn - ex)'|) + max(|(xn - ex)''|)
-	#
-	# на данный момент, это полная хуита(инфа 47%)
-	#shouldContinue = False
-	#for i in range(STEP_COUNT):
-	#	t = A + i * STEP_SIZE
-	#	xn = getYn(t) + G(t)
-	#	if abs(xn - exect(t)) > Eps:
-	#		shouldContinue = True
-	#		break
+	xn = getXn(coefs)
+	norm = norm_L2(diff(xn, exect), A, B)
+	if norm < eps:
+		break
 
 	iterInd += 1
 	print(iterInd)
